@@ -25,21 +25,22 @@ if [[ $? -ne 0 ]]; then
     sudo apt-get install python
 fi
 
-install_process
+sudo install_process
 
 link=$(python3 url_scraper.py)
-wget $link
+sudo wget $link
 
-tar -C /usr/local -xzf *.linux-amd64.tar.gz
+sudo tar -C /usr/local -xzf *.linux-amd64.tar.gz
 
 user=$(whoami)
 
 echo "export GOPATH=/home/$user/go" >> ~/.bashrc
-echo "export GOBIN=$GOPATH/bin" >> ~/.bashrc
+echo "export GOBIN=/home/$user/go/bin" >> ~/.bashrc
 echo "export GOROOT=/usr/local/go" >> ~/.bashrc
 echo "export PATH=$PATH:$GOBIN:$GOROOT/bin" >> ~/.bashrc
 
 go version
 
 deactivate
+rm *.tar.gz
 rm -r venv_to_install_go
