@@ -12,10 +12,15 @@ check() {
 
 install_process () {
     sudo apt install -y python3-venv
+    
     python3 -m venv venv_to_install_go
+    
     source venv_to_install_go/bin/activate
+    
     check "requests"
+    
     check "lxml"
+        
 }
 #checking if python3 version is installed
 is_py_installed=$(python3 --version)
@@ -25,12 +30,19 @@ if [[ $? -ne 0 ]]; then
     sudo apt-get install python
 fi
 
-sudo install_process
+install_process
 
 link=$(python3 url_scraper.py)
+
+deactivate
+
+rm -r venv_to_install_go
+
 sudo wget $link
 
 sudo tar -C /usr/local -xzf *.linux-amd64.tar.gz
+
+rm *.tar.gz
 
 user=$(whoami)
 
@@ -39,8 +51,6 @@ echo "export GOBIN=/home/$user/go/bin" >> ~/.bashrc
 echo "export GOROOT=/usr/local/go" >> ~/.bashrc
 echo "export PATH=$PATH:$GOBIN:$GOROOT/bin" >> ~/.bashrc
 
-go version
+clear
 
-deactivate
-rm *.tar.gz
-rm -r venv_to_install_go
+go version
